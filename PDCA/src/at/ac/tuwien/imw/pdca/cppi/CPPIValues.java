@@ -26,9 +26,13 @@ public class CPPIValues {
 		this.conf = conf;
 		portfolio = conf.getPortfolio();
 		
-		// TODO Implement me
-		// some calculations
-		// i.e. floor, cushion, exposure, ...
+		// Initial CPPI calculations
+		floor = portfolio;
+		cushion = portfolio.subtract(floor).max(BigDecimal.ZERO);
+		exposure = cushion.multiply(conf.getLaverage());
+		reserveasset = portfolio.subtract(exposure);
+		partRiskyAsset = cushion.multiply(conf.getLaverage()).min(conf.getRiskAssetPercent().multiply(portfolio));
+		partRisklessAsset = portfolio.subtract(partRiskyAsset);
 		
 		log.info("Configuration period: "+0+", Floor: "+floor.setScale(4, BigDecimal.ROUND_HALF_UP)+", Cushion: "+cushion.setScale(4, BigDecimal.ROUND_HALF_UP)+", Exposure: "+exposure.setScale(4, BigDecimal.ROUND_HALF_UP)+", Reserveasset: "+reserveasset.setScale(4, BigDecimal.ROUND_HALF_UP)+", PartRisky: "+partRiskyAsset.setScale(4, BigDecimal.ROUND_HALF_UP)+", PartRiskless: "+partRisklessAsset.setScale(4, BigDecimal.ROUND_HALF_UP)+", NewPortfolio: "+portfolio.setScale(4, BigDecimal.ROUND_HALF_UP));
 	}

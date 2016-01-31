@@ -21,12 +21,12 @@ import at.ac.tuwien.imw.pdca.cppi.CPPIValues;
  * @author ivanstojkovic
  */
 public class CPPIService {
-	
+
 	private final static Logger log = LogManager.getLogger(CPPIService.class);
 
 	private static CPPIService instance;
 
-	//	control interval in seconds
+	// control interval in seconds
 	public static final int CONTROL_INTERVAL = 1;
 
 	private CPPIPlanConfiguration planConfiguration;
@@ -35,17 +35,19 @@ public class CPPIService {
 
 	private int currentPeriod;
 	private MeasuredPerformanceValue<BigDecimal> currentTSR;
-	//	Stock price that was used for calculation of current portfolio value
+	// Stock price that was used for calculation of current portfolio value
 	private BigDecimal previousStockPrice;
-	//	new stock price that is going to be used for calculation of new portfolio value
+	// new stock price that is going to be used for calculation of new portfolio
+	// value
 	private BigDecimal currentStockPrice;
-	//	new stock price that is going to be used for calculation of new portfolio value
+	// new stock price that is going to be used for calculation of new portfolio
+	// value
 	private Deviation<BigDecimal> tsrChange;
 
-	//	predefined stock prices
+	// predefined stock prices
 	private ArrayList<Integer> stockPrices;
 
-	//	Wrapper for all cppi values (exposure, reserve asset, etc.) 
+	// Wrapper for all cppi values (exposure, reserve asset, etc.)
 	private CPPIValues cppiValues;
 
 	private CPPIService() {
@@ -57,14 +59,15 @@ public class CPPIService {
 		}
 		return instance;
 	}
-	
+
 	public void init() {
 		currentDeviationValue = new BigDecimal(0.0);
 		currentPeriod = 0;
 		currentStockPrice = new BigDecimal(100);
 		previousStockPrice = new BigDecimal(100);
 		currentTSR = new CPPITSR(new BigDecimal(100));
-		stockPrices = new ArrayList<Integer>(Arrays.asList(new Integer[] {102, 105, 110, 115, 115, 115, 117, 120, 119, 116, 116, 116, 114, 118, 120, 125, 130, 123, 119, 116, 115, 114, 113, 120}));
+		stockPrices = new ArrayList<Integer>(Arrays.asList(new Integer[] { 102, 105, 110, 115, 115, 115, 117, 120, 119,
+				116, 116, 116, 114, 118, 120, 125, 130, 123, 119, 116, 115, 114, 113, 120 }));
 	}
 
 	public BigDecimal getDeviationValue() {
@@ -82,10 +85,10 @@ public class CPPIService {
 	public synchronized MeasuredPerformanceValue<BigDecimal> getCurrentTSR() {
 		return currentTSR;
 	}
-	
+
 	public void setCurrentTSR(MeasuredPerformanceValue<BigDecimal> currentTSR) {
 		synchronized (currentTSR) {
-			this.currentTSR = currentTSR;			
+			this.currentTSR = currentTSR;
 		}
 	}
 
@@ -129,7 +132,7 @@ public class CPPIService {
 		currentPeriod++;
 		previousStockPrice = new BigDecimal(currentStockPrice.doubleValue());
 		currentStockPrice = new BigDecimal(stockPrices.get(currentPeriod % stockPrices.size()));
-		log.info("CurrentStockPrice: "+currentStockPrice);
+		log.info("CurrentStockPrice: " + currentStockPrice);
 	}
 
 	public synchronized void setTSRChange(Deviation<BigDecimal> cppitsrChange) {
