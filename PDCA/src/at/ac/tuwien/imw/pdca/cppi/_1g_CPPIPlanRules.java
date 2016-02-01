@@ -19,7 +19,7 @@ public class _1g_CPPIPlanRules implements PlanningRules {
 
 	@Override
 	public Object applyPlanningRules() {
-		CPPIService service=CPPIService.getInstance();
+		CPPIService service = CPPIService.getInstance();
 		service.getPlanConfiguration().setFloor(floor);
 		return null;
 	}

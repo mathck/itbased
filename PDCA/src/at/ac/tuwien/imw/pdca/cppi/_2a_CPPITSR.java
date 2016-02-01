@@ -12,7 +12,7 @@ import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
  * @author ivanstojkovic
  *
  */
-public class _2a_CPPITSR extends MeasuredPerformanceValue<BigDecimal> {
+public class _2a_CPPITSR extends MeasuredPerformanceValue {
 	
 	public _2a_CPPITSR(BigDecimal value) {
 		super(value);

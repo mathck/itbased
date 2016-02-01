@@ -36,7 +36,7 @@ public class _1_CPPIPlanProcess extends PlanProcess {
 
 	@Override
 	public void plan() {
-		planningRules=new _1g_CPPIPlanRules();
+		planningRules = new _1g_CPPIPlanRules();
 		planningRules.applyPlanningRules();
 	}
 }

@@ -16,13 +16,16 @@ import java.math.BigDecimal;
  */
 public class _3_CPPICheck extends CheckProcess<BigDecimal> {
 
-    CPPIService service=CPPIService.getInstance();
+    CPPIService service = CPPIService.getInstance();
 
     public void run(){
-        this.objectiveSetting=new _1a_CPPIObjective ();
+        this.objectiveSetting = new _1a_CPPIObjective();
         objectiveSetting.setObjectiveSetting(calculateFloor());
-        this.checkingRules=new _1cde_CPPIControlRules();
-
+        
+        this.checkingRules = new _1cde_CPPIControlRules();
+        this.checkingRules.applyCheckingRules();
+        
+        this.performanceValue = new _2a_CPPITSR(service.getCppiValues().getTsr());
     }
 
     @Override
@@ -31,8 +34,8 @@ public class _3_CPPICheck extends CheckProcess<BigDecimal> {
     }
 
     private BigDecimal calculateFloor(){
-        BigDecimal floor=service.getPlanConfiguration().getFloor();
-        BigDecimal risklessAsset=service.getPlanConfiguration().getRisklessAssetPercent();
+        BigDecimal floor = service.getPlanConfiguration().getFloor();
+        BigDecimal risklessAsset = service.getPlanConfiguration().getRisklessAssetPercent();
         Integer daysInYear = service.getPlanConfiguration().getRisklessAssetLastDays();
         BigDecimal risklessInterest = service.getPlanConfiguration().getRisklessAssetPercent();
         Integer currentDay = service.getCurrentPeriod();

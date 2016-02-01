@@ -102,4 +102,8 @@ public class CPPIValues {
 		return actualStockPrice;
 	}
 
+	public void setCushion(BigDecimal cushion) {
+		this.cushion = cushion;
+	}
+
 }
