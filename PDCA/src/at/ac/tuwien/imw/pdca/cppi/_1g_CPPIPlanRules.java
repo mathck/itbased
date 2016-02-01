@@ -17,5 +17,4 @@ public class _1g_CPPIPlanRules implements PlanningRules {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
