@@ -18,6 +18,16 @@ public class CPPIPlanConfiguration extends PlanConfiguration {
 	private BigDecimal laverage = new BigDecimal(2.0);
 	private BigDecimal portfolio = new BigDecimal(100);
 
+	public BigDecimal getFloor() {
+		return floor;
+	}
+
+	public void setFloor(BigDecimal floor) {
+		this.floor = floor;
+	}
+
+	private BigDecimal floor = new BigDecimal(100);
+
 	public CPPIPlanConfiguration() {
 		super();
 	}

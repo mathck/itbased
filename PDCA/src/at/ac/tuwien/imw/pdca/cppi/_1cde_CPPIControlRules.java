@@ -1,6 +1,9 @@
 package at.ac.tuwien.imw.pdca.cppi;
 
+import at.ac.tuwien.imw.pdca.CheckingRules;
 import at.ac.tuwien.imw.pdca.PlanningRules;
+
+import java.math.BigDecimal;
 
 /**
  * Nr 1c & 1d,e
@@ -8,11 +11,14 @@ import at.ac.tuwien.imw.pdca.PlanningRules;
  * @author mathc_000
  *
  */
-public class _1cde_CPPIControlRules implements PlanningRules<Object> {
+public class _1cde_CPPIControlRules implements CheckingRules {
+
+	private BigDecimal m;
+	private BigDecimal b;
+	private BigDecimal C;
 
 	@Override
-	public Object applyPlanningRules() {
-		// TODO calculate m, b, C
-		return null;
+	public void applyCheckingRules() {
+
 	}
 }

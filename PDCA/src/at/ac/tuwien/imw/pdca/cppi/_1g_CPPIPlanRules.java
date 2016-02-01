@@ -1,6 +1,9 @@
 package at.ac.tuwien.imw.pdca.cppi;
 
 import at.ac.tuwien.imw.pdca.PlanningRules;
+import at.ac.tuwien.imw.pdca.cppi.service.CPPIService;
+
+import java.math.BigDecimal;
 
 /**
  * Nr 1g
@@ -12,9 +15,12 @@ import at.ac.tuwien.imw.pdca.PlanningRules;
  */
 public class _1g_CPPIPlanRules implements PlanningRules {
 
+	private BigDecimal floor = new BigDecimal(100);
+
 	@Override
 	public Object applyPlanningRules() {
-		// TODO Auto-generated method stub
+		CPPIService service=CPPIService.getInstance();
+		service.getPlanConfiguration().setFloor(floor);
 		return null;
 	}
 }
