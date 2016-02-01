@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 import at.ac.tuwien.imw.pdca.Deviation;
 import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
 import at.ac.tuwien.imw.pdca.cppi.CPPIPlanConfiguration;
-import at.ac.tuwien.imw.pdca.cppi.CPPITSR;
-import at.ac.tuwien.imw.pdca.cppi.CPPITSRChange;
+import at.ac.tuwien.imw.pdca.cppi._2a_CPPITSR;
+import at.ac.tuwien.imw.pdca.cppi._3a_CPPITSRChange;
 import at.ac.tuwien.imw.pdca.cppi.CPPIValues;
 
 /**
@@ -65,7 +65,7 @@ public class CPPIService {
 		currentPeriod = 0;
 		currentStockPrice = new BigDecimal(100);
 		previousStockPrice = new BigDecimal(100);
-		currentTSR = new CPPITSR(new BigDecimal(100));
+		currentTSR = new _2a_CPPITSR(new BigDecimal(100));
 		stockPrices = new ArrayList<Integer>(Arrays.asList(new Integer[] { 102, 105, 110, 115, 115, 115, 117, 120, 119,
 				116, 116, 116, 114, 118, 120, 125, 130, 123, 119, 116, 115, 114, 113, 120 }));
 	}

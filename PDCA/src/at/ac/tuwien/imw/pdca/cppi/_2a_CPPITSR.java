@@ -5,14 +5,16 @@ import java.math.BigDecimal;
 import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
 
 /**
+ * Nr 2a
+ * Recieve measurement data and calculate performance
  * Total shareholder return
  * 
  * @author ivanstojkovic
  *
  */
-public class CPPITSR extends MeasuredPerformanceValue<BigDecimal> {
+public class _2a_CPPITSR extends MeasuredPerformanceValue<BigDecimal> {
 	
-	public CPPITSR(BigDecimal value) {
+	public _2a_CPPITSR(BigDecimal value) {
 		super(value);
 	}
 }
