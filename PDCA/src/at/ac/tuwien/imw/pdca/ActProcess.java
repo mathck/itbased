@@ -12,5 +12,4 @@ public abstract class ActProcess<T, K> implements Runnable {
 	public AdaptiveActRules adaptiveActRules;
 	
 	public abstract CorrectiveActOutput<T> act(Deviation<K> deviation);
-
 }

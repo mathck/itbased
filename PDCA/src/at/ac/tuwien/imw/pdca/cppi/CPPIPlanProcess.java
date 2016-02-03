@@ -1,12 +1,5 @@
 package at.ac.tuwien.imw.pdca.cppi;
-
-import at.ac.tuwien.imw.pdca.ObjectiveSetting;
 import at.ac.tuwien.imw.pdca.PlanProcess;
-import at.ac.tuwien.imw.pdca.cppi.service.CPPIService;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
  * @author mathc_000
@@ -27,7 +20,7 @@ import java.util.LinkedList;
  *
  * This here is obviously intended for 1g.
  */
-public class _1_CPPIPlanProcess extends PlanProcess {
+public class CPPIPlanProcess extends PlanProcess {
 
 	@Override
 	public void run() {
@@ -36,7 +29,7 @@ public class _1_CPPIPlanProcess extends PlanProcess {
 
 	@Override
 	public void plan() {
-		planningRules = new _1g_CPPIPlanRules();
+		planningRules = new CPPIPlanRules();
 		planningRules.applyPlanningRules();
 	}
 }

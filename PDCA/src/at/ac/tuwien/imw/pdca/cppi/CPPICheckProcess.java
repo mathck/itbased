@@ -14,18 +14,18 @@ import java.math.BigDecimal;
  * @author mathc_000
  *
  */
-public class _3_CPPICheck extends CheckProcess<BigDecimal> {
+public class CPPICheckProcess extends CheckProcess<BigDecimal> {
 
     CPPIService service = CPPIService.getInstance();
 
     public void run(){
-        this.objectiveSetting = new _1a_CPPIObjective();
+        this.objectiveSetting = new CPPIObjective();
         objectiveSetting.setObjectiveSetting(calculateFloor());
         
-        this.checkingRules = new _1cde_CPPIControlRules();
+        this.checkingRules = new CPPICheckRules();
         this.checkingRules.applyCheckingRules();
         
-        this.performanceValue = new _2a_CPPITSR(service.getCppiValues().getTsr());
+        this.performanceValue = null;
     }
 
     @Override
@@ -33,6 +33,7 @@ public class _3_CPPICheck extends CheckProcess<BigDecimal> {
         return null;
     }
 
+    @Deprecated
     private BigDecimal calculateFloor(){
         BigDecimal floor = service.getPlanConfiguration().getFloor();
         BigDecimal risklessAsset = service.getPlanConfiguration().getRisklessAssetPercent();
