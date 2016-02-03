@@ -21,7 +21,7 @@ public class CPPIPlanRules implements PlanningRules<BigDecimal> {
 	private BigDecimal INITIAL_TtT = new BigDecimal(1);
 	
 	@Override
-	public BigDecimal applyPlanningRules() {
+	public BigDecimal applyPlanningRules() { 
 		
 		CPPIService service = CPPIService.getInstance();
 		CPPIPlanConfiguration conf = service.getPlanConfiguration();
