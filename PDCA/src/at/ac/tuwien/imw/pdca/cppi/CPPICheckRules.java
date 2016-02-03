@@ -13,7 +13,16 @@ public class CPPICheckRules implements CheckingRules {
 	@Override
 	public void applyCheckingRules() {
 		CPPIService service = CPPIService.getInstance();
-		//CPPIPlanConfiguration conf = service.getPlanConfiguration();
+		CPPIPlanConfiguration conf = service.getPlanConfiguration();
+		
+		
+		//-------------------------------------------------------
+		// CALCULATE CUSHION
+		//-------------------------------------------------------
+		BigDecimal floor = conf.getFloor();
+		BigDecimal W = conf.getPortfolio();
+		
+		service.getCppiValues().setCushion(W.subtract(floor).max(new BigDecimal(0)));
 		
 		//-------------------------------------------------------
 		// CALCULATE TSR

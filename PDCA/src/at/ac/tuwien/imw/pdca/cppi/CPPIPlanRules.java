@@ -16,18 +16,28 @@ import java.math.MathContext;
  *
  */
 public class CPPIPlanRules implements PlanningRules<BigDecimal> {
-
+	
 	private BigDecimal INITIAL_FLOOR = new BigDecimal(100);
 	private BigDecimal INITIAL_TtT = new BigDecimal(1);
 	
 	@Override
 	public BigDecimal applyPlanningRules() {
+		
 		CPPIService service = CPPIService.getInstance();
 		CPPIPlanConfiguration conf = service.getPlanConfiguration();
-		
+
 		//-------------------------------------------------------
 		// SET OBJECTIVE + CALCULATE FLOOR
 		//-------------------------------------------------------
+		//Bitte schauen, ob es die Klasse Objective überhaupt noch braucht.
+		//Ich bin mir nicht sicher, und habs deshalb drinnen gelassen.
+		//Meiner Meinung nach reicht es, wenn man 
+		// if( service.getCurrentPeriod() == 0 ){}
+		//statt der derzeitige IF Funktion prüft und dann, wie im ELSE Pfad
+		// conf.setFloor(INITIAL_FLOOR);
+		//setzt.
+		// TODO SET OBJECTIVE + CALCULATE FLOOR
+		
 		CPPIObjective objective = CPPIObjective.getInstance();
 		if(objective.getObjectiveSetting().equals(null)) {
 			// set default
@@ -51,15 +61,6 @@ public class CPPIPlanRules implements PlanningRules<BigDecimal> {
 			floor = INITIAL_FLOOR.divide(new BigDecimal(Math.pow(base, exp)));
 			conf.setFloor(floor);
 		}
-		
-		//-------------------------------------------------------
-		// CALCULATE CUSHION
-		//-------------------------------------------------------
-		BigDecimal floor = conf.getFloor();
-		BigDecimal W = conf.getPortfolio();
-		
-		// calc and set Ct
-		service.getCppiValues().setCushion(W.subtract(floor).max(new BigDecimal(0)));
 		
 		return null;
 	}

@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import at.ac.tuwien.imw.pdca.Deviation;
 import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
 import at.ac.tuwien.imw.pdca.cppi.CPPIPlanConfiguration;
-import at.ac.tuwien.imw.pdca.cppi._2a_CPPITSR;
 import at.ac.tuwien.imw.pdca.cppi.CPPICheckRules;
 import at.ac.tuwien.imw.pdca.cppi.CPPIValues;
 
