@@ -3,7 +3,7 @@ package at.ac.tuwien.imw.pdca;
 
 /**
  *
- * @author ivanstojkovic
+ * @author ivanstojkovic 
  *
  */
 public abstract class ActProcess<T, K> implements Runnable {
