@@ -17,8 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 /**
- * 
- *
+ * main execution class holding all 4 Threads
  */
 public class CPPISimulation {
 	private final static Logger log = LogManager.getLogger(CPPISimulation.class);
@@ -36,18 +35,17 @@ public class CPPISimulation {
 	/**
 	 * General Idea:
 	 * 
-	 * start Plan	(which runs 1, 1a, 1b, 1c, 1d, 1e, 1f, 1g)
-	 * start Do		(which runs 2, 2a)
-	 * start Check	(which runs 3, 3a)
-	 * start Act	(which runs 4, 4a, 4b)
+	 * start Plan
+	 * start Do
+	 * start Check
+	 * start Act
 	 */
 	public static void main(String[] args) {
-		BasicConfigurator.configure(); // needed for log4j
+		BasicConfigurator.configure();
 		
 		CPPITableDrawer.Headlines();
 		
 		CPPIService service = CPPIService.getInstance();
-		
 		service.init();
 		service.setPlanConfiguration(new CPPIPlanConfiguration());
 		service.getCppiValues();
@@ -69,6 +67,7 @@ public class CPPISimulation {
 			CPPIService.getInstance().actLockObject.notify();
 		}
 		
+		// Wait for last process to end
 		synchronized (CPPIService.getInstance().shutdownLockObject) {
 			try {
 				CPPIService.getInstance().shutdownLockObject.wait();

@@ -55,6 +55,12 @@ public class CPPIActProcess extends ActProcess<BigDecimal, BigDecimal> { // todo
 		return null; // todo kA ob das stimmt
 	}
 	
+	/**
+	 * Round double value, Math is missing this functionality
+	 * @param value value to round
+	 * @param places how many digits after the dot?
+	 * @return rounded double
+	 */
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 

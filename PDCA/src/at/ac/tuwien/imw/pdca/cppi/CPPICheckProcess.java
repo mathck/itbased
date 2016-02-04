@@ -46,21 +46,4 @@ public class CPPICheckProcess extends CheckProcess<BigDecimal> {
     public Deviation<BigDecimal> getCheckResult(ObjectiveSetting<BigDecimal> objective, MeasuredPerformanceValue<BigDecimal> performanceMeasureValue) {
         return null;
     }
-
-    // any calculation must happen in a rule, floor calculation is already present in Plan Rules
-    @Deprecated
-    private BigDecimal calculateFloor(){
-        BigDecimal floor = service.getPlanConfiguration().getFloor();
-        BigDecimal risklessAsset = service.getPlanConfiguration().getRisklessAssetPercent();
-        Integer daysInYear = service.getPlanConfiguration().getRisklessAssetLastDays();
-        BigDecimal risklessInterest = service.getPlanConfiguration().getRisklessAssetPercent();
-        Integer currentDay = service.getCurrentPeriod();
-
-        BigDecimal calculatedFloor=risklessAsset.divide(new BigDecimal (daysInYear-currentDay));
-        calculatedFloor = calculatedFloor.add(new BigDecimal(1));
-        calculatedFloor = new BigDecimal(1).divide(calculatedFloor);
-        calculatedFloor.pow(daysInYear-currentDay).multiply(floor);
-
-        return calculatedFloor;
-    }
 }
