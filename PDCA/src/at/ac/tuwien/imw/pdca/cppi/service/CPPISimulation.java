@@ -62,22 +62,39 @@ public class CPPISimulation {
 		executor.execute(checkProcessThread);
 		executor.execute(actProcessThread);
 		
-		// Startschuss!
+		//-------------------------------------------------------------------
+		// wait just 1 second to make sure all processes are initialized
+		//-------------------------------------------------------------------
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		//-------------------------------------------------------------------
+		
+		//-------------------------------------------------------------------
+		// Start the game!
+		//-------------------------------------------------------------------
 		synchronized (CPPIService.getInstance().actLockObject) {
 			CPPIService.getInstance().actLockObject.notify();
 		}
+		//-------------------------------------------------------------------
 		
-		// Wait for last process to end
+		//-------------------------------------------------------------------
+		// Wait for last process to end and kill the application
+		//-------------------------------------------------------------------
 		synchronized (CPPIService.getInstance().shutdownLockObject) {
 			try {
 				CPPIService.getInstance().shutdownLockObject.wait();
 				
 				executor.shutdown();
 				CPPITableDrawer.CloseTable();
+				System.exit(0);
 				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		//-------------------------------------------------------------------
 	}
 }
