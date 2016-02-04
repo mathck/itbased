@@ -53,6 +53,8 @@ public class CPPIPlanRules implements PlanningRules<BigDecimal> {
 			for(int i = 0; i < service.getCurrentPeriod(); i++)
 				currentT = currentT.subtract(INITIAL_TtT.divide(new BigDecimal(days)));
 			
+			service.setCurrentTtT(currentT);
+			
 			double base = (service.getPlanConfiguration().
 					getRisklessAssetInterest().doubleValue() + 1);
 			double exp = currentT.doubleValue();

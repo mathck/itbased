@@ -1,4 +1,6 @@
 package at.ac.tuwien.imw.pdca.cppi;
+import java.math.BigDecimal;
+
 import at.ac.tuwien.imw.pdca.PlanProcess;
 
 /**
@@ -20,7 +22,7 @@ import at.ac.tuwien.imw.pdca.PlanProcess;
  *
  * This here is obviously intended for 1g.
  */
-public class CPPIPlanProcess extends PlanProcess {
+public class CPPIPlanProcess extends PlanProcess<BigDecimal> {
 
 	@Override
 	public void run() {

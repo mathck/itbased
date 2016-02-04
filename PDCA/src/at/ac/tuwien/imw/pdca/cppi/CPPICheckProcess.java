@@ -33,6 +33,7 @@ public class CPPICheckProcess extends CheckProcess<BigDecimal> {
         return null;
     }
 
+    // any calculation must happen in a rule, floor calculation is already present in Plan Rules
     @Deprecated
     private BigDecimal calculateFloor(){
         BigDecimal floor = service.getPlanConfiguration().getFloor();

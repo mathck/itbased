@@ -13,7 +13,7 @@ import at.ac.tuwien.imw.pdca.cppi.service.CPPIService;
  * Nr 4
  * @author mathc_000
  */
-public class CPPIActProcess extends ActProcess<CorrectiveActRules, BigDecimal> {
+public class CPPIActProcess extends ActProcess<CorrectiveActRules, BigDecimal> { // todo kA ob "CorrectiveActRules, BigDecimal" stimmt
 
 	@Override
 	public void run() {
@@ -25,6 +25,6 @@ public class CPPIActProcess extends ActProcess<CorrectiveActRules, BigDecimal> {
 		CPPIService.getInstance().setDeviationValue(deviation.getValue());
 		correctiveActRules = new CPPIActRules();
 		
-		return (CorrectiveActOutput<CorrectiveActRules>) correctiveActRules;
+		return (CorrectiveActOutput<CorrectiveActRules>) correctiveActRules; // todo kA ob das stimmt
 	}
 }

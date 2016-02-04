@@ -10,6 +10,6 @@ public class CPPIDoRules implements DoRules {
 		CPPIService service = CPPIService.getInstance();
 		CPPIPlanConfiguration conf = service.getPlanConfiguration();
 		
-		
+		// TODO no calculation? :((
 	}
 }

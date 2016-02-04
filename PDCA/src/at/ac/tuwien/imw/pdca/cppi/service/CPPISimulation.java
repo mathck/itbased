@@ -1,7 +1,10 @@
 package at.ac.tuwien.imw.pdca.cppi.service;
 
 import at.ac.tuwien.imw.pdca.cppi.CPPIPlanProcess;
+import at.ac.tuwien.imw.tables.CPPITableDrawer;
 import at.ac.tuwien.imw.pdca.cppi.CPPIObjective;
+
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -26,7 +29,10 @@ public class CPPISimulation {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		BasicConfigurator.configure(); // needed for log4j
+		
+		CPPITableDrawer.Headlines();
+		
 		int NTHREADS = 10;
 
 		CPPIService service = CPPIService.getInstance();
@@ -35,6 +41,9 @@ public class CPPISimulation {
 		service.setPlanConfiguration(new CPPIPlanConfiguration());
 		service.getCppiValues();
 		ExecutorService executor  = Executors.newFixedThreadPool(NTHREADS);
+		
+		// TODO DELETE ME, this should be run by die CPPIStockPriceGenerator instead
+		service.updateActualStockPrice();
 
 		//xyProcess = new CPPITSRxy();
 		//xyProcessThread = new Thread(xyProcess);
@@ -45,9 +54,9 @@ public class CPPISimulation {
 		// HOW TO DO Synchronization IN JAVA : TUTORIAL ->
 		// http://www.fh-wedel.de/~si/vorlesungen/java/OOPMitJava/Multithreading/Synchronisation.html
 		
-		new Thread(new CPPIStockPriceGenerator()).start();
+		//new Thread(new CPPIStockPriceGenerator()).start();
 
-		Runnable planProcess = new CPPIPlanProcess();
+		//Runnable planProcess = new CPPIPlanProcess();
 		
 		/**
 		 * General Idea:
@@ -59,6 +68,7 @@ public class CPPISimulation {
 		 */
 
 		executor.shutdown();
-
+		
+		CPPITableDrawer.CloseTable();
 	}
 }

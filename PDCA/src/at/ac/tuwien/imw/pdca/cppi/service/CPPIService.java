@@ -14,6 +14,7 @@ import at.ac.tuwien.imw.pdca.cppi.CPPIPlanConfiguration;
 import at.ac.tuwien.imw.pdca.cppi.CPPICheckRules;
 import at.ac.tuwien.imw.pdca.cppi.CPPIMeasure;
 import at.ac.tuwien.imw.pdca.cppi.CPPIValues;
+import at.ac.tuwien.imw.tables.CPPITableDrawer;
 
 /**
  * PDCA Service is a singleton that holds the state of a PDCA process
@@ -49,6 +50,9 @@ public class CPPIService {
 
 	// Wrapper for all cppi values (exposure, reserve asset, etc.)
 	private CPPIValues cppiValues;
+	
+	// TODO DELETE ME I was added by Mateusz
+	private BigDecimal currentTtT;
 
 	private CPPIService() {
 	}
@@ -128,11 +132,20 @@ public class CPPIService {
 	}
 
 	public void updateActualStockPrice() {
-		log.info("updateActualStockPrice");
+		//log.info("updateActualStockPrice");
 		currentPeriod++;
 		previousStockPrice = new BigDecimal(currentStockPrice.doubleValue());
 		currentStockPrice = new BigDecimal(stockPrices.get(currentPeriod % stockPrices.size()));
-		log.info("CurrentStockPrice: " + currentStockPrice);
+		
+		CPPITableDrawer.AddLine(this.currentPeriod-1,
+				this.getCppiValues().getFloor().doubleValue(),
+				this.getCurrentTtT().doubleValue(),
+				this.getCppiValues().getCushion().doubleValue(),
+				this.getCppiValues().getRiskAssetValue().doubleValue(),
+				this.getCppiValues().getReserveasset().doubleValue(), 
+				this.getCurrentStockPrice().doubleValue(),
+				this.getCurrentTSR().getValue().doubleValue(),
+				this.getCppiValues().getPortfolio().doubleValue());
 	}
 
 	public synchronized void setTSRChange(Deviation<BigDecimal> cppitsrChange) {
@@ -145,6 +158,14 @@ public class CPPIService {
 
 	public void setTsrChange(Deviation<BigDecimal> tsrChange) {
 		this.tsrChange = tsrChange;
+	}
+
+	public BigDecimal getCurrentTtT() {
+		return currentTtT != null ? currentTtT : new BigDecimal(1);
+	}
+
+	public void setCurrentTtT(BigDecimal currentTtT) {
+		this.currentTtT = currentTtT;
 	}
 
 }
