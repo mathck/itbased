@@ -2,6 +2,9 @@ package at.ac.tuwien.imw.pdca.cppi.service;
 
 import at.ac.tuwien.imw.pdca.cppi.CPPIPlanProcess;
 import at.ac.tuwien.imw.tables.CPPITableDrawer;
+import at.ac.tuwien.imw.pdca.cppi.CPPIActProcess;
+import at.ac.tuwien.imw.pdca.cppi.CPPICheckProcess;
+import at.ac.tuwien.imw.pdca.cppi.CPPIDoProcess;
 import at.ac.tuwien.imw.pdca.cppi.CPPIObjective;
 
 import org.apache.log4j.BasicConfigurator;
@@ -13,62 +16,69 @@ import at.ac.tuwien.imw.pdca.cppi.CPPIPlanConfiguration;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * 
+ *
+ */
 public class CPPISimulation {
 	private final static Logger log = LogManager.getLogger(CPPISimulation.class);
 	
-	// TODO Implement me
-	// private static CPPIxyProcess xpProcess;
-	// ...
+	private static CPPIPlanProcess planProcess = new CPPIPlanProcess();
+	private static CPPIDoProcess doProcess = new CPPIDoProcess();
+	private static CPPICheckProcess checkProcess = new CPPICheckProcess();
+	private static CPPIActProcess actProcess = new CPPIActProcess();
 	
-	// TODO Implement me
-	// private static Thread xyProcessThread;
-	// ...
+	private static Thread planProcessThread;
+	private static Thread doProcessThread;
+	private static Thread checkProcessThread;
+	private static Thread actProcessThread;
 	
 	/**
-	 * main execution class
-	 * @param args
+	 * General Idea:
+	 * 
+	 * start Plan	(which runs 1, 1a, 1b, 1c, 1d, 1e, 1f, 1g)
+	 * start Do		(which runs 2, 2a)
+	 * start Check	(which runs 3, 3a)
+	 * start Act	(which runs 4, 4a, 4b)
 	 */
 	public static void main(String[] args) {
 		BasicConfigurator.configure(); // needed for log4j
 		
 		CPPITableDrawer.Headlines();
 		
-		int NTHREADS = 10;
-
 		CPPIService service = CPPIService.getInstance();
 		
 		service.init();
 		service.setPlanConfiguration(new CPPIPlanConfiguration());
 		service.getCppiValues();
-		ExecutorService executor  = Executors.newFixedThreadPool(NTHREADS);
 		
-		// TODO DELETE ME, this should be run by die CPPIStockPriceGenerator instead
-		service.updateActualStockPrice();
-
-		//xyProcess = new CPPITSRxy();
-		//xyProcessThread = new Thread(xyProcess);
-		//xyProcessThread.start();
+		ExecutorService executor  = Executors.newFixedThreadPool(4);
 		
-		//...
+		planProcessThread = new Thread(planProcess);
+		doProcessThread = new Thread(doProcess);
+		checkProcessThread = new Thread(checkProcess);
+		actProcessThread = new Thread(actProcess);
 		
-		// HOW TO DO Synchronization IN JAVA : TUTORIAL ->
-		// http://www.fh-wedel.de/~si/vorlesungen/java/OOPMitJava/Multithreading/Synchronisation.html
+		executor.execute(planProcessThread);
+		executor.execute(doProcessThread);
+		executor.execute(checkProcessThread);
+		executor.execute(actProcessThread);
 		
-		//new Thread(new CPPIStockPriceGenerator()).start();
-
-		//Runnable planProcess = new CPPIPlanProcess();
+		// Startschuss!
+		synchronized (CPPIService.getInstance().actLockObject) {
+			CPPIService.getInstance().actLockObject.notify();
+		}
 		
-		/**
-		 * General Idea:
-		 * 
-		 * start Plan	(which runs 1, 1a, 1b, 1c, 1d, 1e, 1f, 1g)
-		 * start Do		(which runs 2, 2a)
-		 * start Check	(which runs 3, 3a)
-		 * start Act	(which runs 4, 4a, 4b)
-		 */
-
-		executor.shutdown();
-		
-		CPPITableDrawer.CloseTable();
+		synchronized (CPPIService.getInstance().shutdownLockObject) {
+			try {
+				CPPIService.getInstance().shutdownLockObject.wait();
+				
+				executor.shutdown();
+				CPPITableDrawer.CloseTable();
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

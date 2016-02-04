@@ -2,6 +2,7 @@ package at.ac.tuwien.imw.pdca.cppi;
 
 import at.ac.tuwien.imw.pdca.DoProcess;
 import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
+import at.ac.tuwien.imw.pdca.cppi.service.CPPIService;
 
 /**
  * Nr 2
@@ -13,7 +14,22 @@ public class CPPIDoProcess extends DoProcess {
 
 	@Override
 	public void run() {
-		this.doRules.applyDoRules();
+		while(true) {
+			synchronized (CPPIService.getInstance().planLockObject) {
+				try {
+					CPPIService.getInstance().planLockObject.wait();
+					
+					operate();
+					this.doRules.applyDoRules();
+					
+					synchronized (CPPIService.getInstance().doLockObject) {
+						CPPIService.getInstance().doLockObject.notify();
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override

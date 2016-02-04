@@ -18,14 +18,28 @@ public class CPPICheckProcess extends CheckProcess<BigDecimal> {
 
     CPPIService service = CPPIService.getInstance();
 
-    public void run(){
-        this.objectiveSetting = new CPPIObjective();
-        objectiveSetting.setObjectiveSetting(calculateFloor());
-        
-        this.checkingRules = new CPPICheckRules();
-        this.checkingRules.applyCheckingRules();
-        
-        this.performanceValue = null;
+    public void run() {
+    	while(true) {
+	    	synchronized (CPPIService.getInstance().doLockObject) {
+				try {
+					CPPIService.getInstance().doLockObject.wait();
+					
+					this.objectiveSetting = CPPIObjective.getInstance();
+			        
+			        this.checkingRules = new CPPICheckRules();
+			        this.checkingRules.applyCheckingRules();
+			        
+			        this.performanceValue = null;
+			        
+			        synchronized (CPPIService.getInstance().checkLockObject) {
+						CPPIService.getInstance().checkLockObject.notify();
+					}
+			        
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+    	}
     }
 
     @Override

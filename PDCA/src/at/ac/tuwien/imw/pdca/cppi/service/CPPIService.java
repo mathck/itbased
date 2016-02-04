@@ -12,6 +12,7 @@ import at.ac.tuwien.imw.pdca.Deviation;
 import at.ac.tuwien.imw.pdca.MeasuredPerformanceValue;
 import at.ac.tuwien.imw.pdca.cppi.CPPIPlanConfiguration;
 import at.ac.tuwien.imw.pdca.cppi.CPPICheckRules;
+import at.ac.tuwien.imw.pdca.cppi.CPPIDeviation;
 import at.ac.tuwien.imw.pdca.cppi.CPPIMeasure;
 import at.ac.tuwien.imw.pdca.cppi.CPPIValues;
 import at.ac.tuwien.imw.tables.CPPITableDrawer;
@@ -26,6 +27,12 @@ public class CPPIService {
 	private final static Logger log = LogManager.getLogger(CPPIService.class);
 
 	private static CPPIService instance;
+
+	public Object shutdownLockObject = new Object();
+	public Object planLockObject = new Object();
+	public Object doLockObject = new Object();
+	public Object checkLockObject = new Object();
+	public Object actLockObject = new Object();
 
 	// control interval in seconds
 	public static final int CONTROL_INTERVAL = 1;
@@ -50,7 +57,7 @@ public class CPPIService {
 
 	// Wrapper for all cppi values (exposure, reserve asset, etc.)
 	private CPPIValues cppiValues;
-	
+
 	// TODO DELETE ME I was added by Mateusz
 	private BigDecimal currentTtT;
 
@@ -67,11 +74,12 @@ public class CPPIService {
 	public void init() {
 		currentDeviationValue = new BigDecimal(0.0);
 		currentPeriod = 0;
-		currentStockPrice = new BigDecimal(100);
+		
 		previousStockPrice = new BigDecimal(100);
-		currentTSR = new CPPIMeasure(new BigDecimal(1));
+		currentTSR = null;
 		stockPrices = new ArrayList<Integer>(Arrays.asList(new Integer[] { 102, 105, 110, 115, 115, 115, 117, 120, 119,
 				116, 116, 116, 114, 118, 120, 125, 130, 123, 119, 116, 115, 114, 113, 120 }));
+		currentStockPrice = new BigDecimal(stockPrices.get(0));
 	}
 
 	public BigDecimal getDeviationValue() {
@@ -132,20 +140,21 @@ public class CPPIService {
 	}
 
 	public void updateActualStockPrice() {
-		//log.info("updateActualStockPrice");
-		currentPeriod++;
-		previousStockPrice = new BigDecimal(currentStockPrice.doubleValue());
-		currentStockPrice = new BigDecimal(stockPrices.get(currentPeriod % stockPrices.size()));
+		// log.info("updateActualStockPrice");
 		
-		CPPITableDrawer.AddLine(this.currentPeriod-1,
+		CPPITableDrawer.AddLine(this.currentPeriod,
 				this.getCppiValues().getFloor().doubleValue(),
 				this.getCurrentTtT().doubleValue(),
 				this.getCppiValues().getCushion().doubleValue(),
-				this.getCppiValues().getRiskAssetValue().doubleValue(),
-				this.getCppiValues().getReserveasset().doubleValue(), 
+				this.getCppiValues().getPartRiskyAsset().doubleValue(),
+				this.getCppiValues().getPartRisklessAsset().doubleValue(),
 				this.getCurrentStockPrice().doubleValue(),
-				this.getCurrentTSR().getValue().doubleValue(),
+				this.getCppiValues().getTsr() != null ? this.getCppiValues().getTsr().doubleValue() * 100 : null,
 				this.getCppiValues().getPortfolio().doubleValue());
+		
+		currentPeriod++;
+		previousStockPrice = new BigDecimal(currentStockPrice.doubleValue());
+		currentStockPrice = new BigDecimal(stockPrices.get(currentPeriod % stockPrices.size()));
 	}
 
 	public synchronized void setTSRChange(Deviation<BigDecimal> cppitsrChange) {

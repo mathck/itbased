@@ -1,5 +1,6 @@
 package at.ac.tuwien.imw.pdca.cppi;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import at.ac.tuwien.imw.pdca.CheckingRules;
 import at.ac.tuwien.imw.pdca.Deviation;
@@ -13,23 +14,14 @@ public class CPPICheckRules implements CheckingRules {
 	@Override
 	public void applyCheckingRules() {
 		CPPIService service = CPPIService.getInstance();
-		CPPIPlanConfiguration conf = service.getPlanConfiguration();
-		
-		
-		//-------------------------------------------------------
-		// CALCULATE CUSHION
-		//-------------------------------------------------------
-		BigDecimal floor = conf.getFloor();
-		BigDecimal W = conf.getPortfolio();
-		
-		service.getCppiValues().setCushion(W.subtract(floor).max(new BigDecimal(0)));
+		//CPPIPlanConfiguration conf = service.getPlanConfiguration();
 		
 		//-------------------------------------------------------
 		// CALCULATE TSR
 		//-------------------------------------------------------
 		if(service.getCurrentPeriod() > 0) {
-			BigDecimal change = service.getCurrentStockPrice().divide(service.getPreviousStockPrice());
-			service.setTsrChange(new CPPIDeviation(change.subtract(new BigDecimal(1))));
+			BigDecimal change = service.getCurrentStockPrice().divide(service.getPreviousStockPrice(), 10, RoundingMode.HALF_UP);
+			service.getCppiValues().setTsr(change.subtract(new BigDecimal(1)));
 		}
 	}
 }

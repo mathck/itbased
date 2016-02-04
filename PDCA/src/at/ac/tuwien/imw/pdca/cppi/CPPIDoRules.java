@@ -8,7 +8,7 @@ public class CPPIDoRules implements DoRules {
 	@Override
 	public void applyDoRules() {
 		CPPIService service = CPPIService.getInstance();
-		CPPIPlanConfiguration conf = service.getPlanConfiguration();
+		//CPPIPlanConfiguration conf = service.getPlanConfiguration();
 		
 		// TODO no calculation? :((
 	}

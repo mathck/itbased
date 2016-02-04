@@ -13,18 +13,54 @@ import at.ac.tuwien.imw.pdca.cppi.service.CPPIService;
  * Nr 4
  * @author mathc_000
  */
-public class CPPIActProcess extends ActProcess<CorrectiveActRules, BigDecimal> { // todo kA ob "CorrectiveActRules, BigDecimal" stimmt
+public class CPPIActProcess extends ActProcess<BigDecimal, BigDecimal> { // todo kA ob "CorrectiveActRules, BigDecimal" stimmt
 
 	@Override
 	public void run() {
-		correctiveActRules.applyActRules();
+		
+		synchronized (CPPIService.getInstance().checkLockObject) {
+			while(true) {
+				try {
+					CPPIService.getInstance().checkLockObject.wait();
+					
+					act(new CPPIDeviation(new BigDecimal(1)));
+					correctiveActRules.applyActRules();
+					
+					CPPIService.getInstance().updateActualStockPrice();
+			        
+					// if periode > days
+					if(CPPIService.getInstance().getCurrentPeriod() <= CPPIService.getInstance().getPlanConfiguration().getRisklessAssetLastDays()) {
+						synchronized (CPPIService.getInstance().actLockObject) {
+							CPPIService.getInstance().actLockObject.notify();
+						}
+					}
+					else {
+						synchronized (CPPIService.getInstance().shutdownLockObject) {
+							CPPIService.getInstance().shutdownLockObject.notify();
+						}
+					}
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override
-	public CorrectiveActOutput<CorrectiveActRules> act(Deviation<BigDecimal> deviation) {
+	public CorrectiveActOutput<BigDecimal> act(Deviation<BigDecimal> deviation) {
 		CPPIService.getInstance().setDeviationValue(deviation.getValue());
 		correctiveActRules = new CPPIActRules();
 		
-		return (CorrectiveActOutput<CorrectiveActRules>) correctiveActRules; // todo kA ob das stimmt
+		return null; // todo kA ob das stimmt
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
 	}
 }
